@@ -6,10 +6,10 @@ buildconsole_url = "https://buildconsole.ulti.io/api/pipeline/654aa1e7340e6379f8
 
 response = requests.get(buildconsole_url)
 
-data = response.json()
+data = response.json()["builds"]
 
-for i in range(0, len(data["builds"])):
-    buildconsole_id = data["_id"]
-    build_number = data["builds"][i]["buildNumber"]
-    build_state = data["builds"][i]["displayStepMap"]["P0 Quality Gate"]["subSteps"][0]["progress"]["state"]
+for i in range(0, len(data)):
+    buildconsole_id = data[i]["_id"]
+    build_number = data[i]["buildNumber"]
+    build_state = data[i]["displayStepMap"]["P0 Quality Gate"]["subSteps"][0]["progress"]["state"]
     print(f"BuildConsole ID: {buildconsole_id} || Build Number: {build_number} || State: {build_state}")
