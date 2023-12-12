@@ -10,3 +10,6 @@ class Environment:
     
     def getTeamcityToken(self):
         return os.getenv("TEAMCITY_TOKEN")
+    
+    def getWebhookURL(self, webhook_name):
+        return os.getenv(webhook_name)
