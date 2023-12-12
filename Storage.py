@@ -4,7 +4,7 @@ class Storage:
     file_path = ""
 
     def __init__(self):
-        self.file_path = "C:/Data/builds2.txt"
+        self.file_path = "C:/Data/builds.txt"
         if self.buildsFileExists() is False:
             self.__createBuildsFile()
 
