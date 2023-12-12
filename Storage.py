@@ -7,6 +7,9 @@ class Storage:
         self.file_path = "C:/Data/builds.txt"
         pass
 
+    def __createBuildsFile(self):
+        file = open(self.file_path, "w").close()
+
     def buildsFileExists(self):
         return True if os.path.exists(self.file_path) else False
     
