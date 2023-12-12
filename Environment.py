@@ -1,3 +1,12 @@
+import os
+from dotenv import load_dotenv
+
 class Environment:
     def __init__(self):
-        pass
+        load_dotenv()
+
+    def getEnvironmentName(self):
+        return os.getenv("ENVIRONMENT_NAME")
+    
+    def getTeamcityToken(self):
+        return os.getenv("TEAMCITY_TOKEN")
