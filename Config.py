@@ -13,4 +13,7 @@ class Config():
             next(file)
 
             for line in csv_file:
-                print(line)
+                variable_name = line[0]
+                variable_value = line[1]
+
+                self.config[variable_name] = variable_value
