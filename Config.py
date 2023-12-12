@@ -5,9 +5,9 @@ class Config():
     config = {}
 
     def __init__(self):
-        pass
+        self.__readConfigFile()
 
-    def readConfigFile(self):
+    def __readConfigFile(self):
         with open(self.config_file_path, mode="r", ) as file:
             csv_file = csv.reader(file)
             next(file)
@@ -17,3 +17,6 @@ class Config():
                 variable_value = line[1]
 
                 self.config[variable_name] = variable_value
+    
+    def getConfig(self):
+        return self.config
