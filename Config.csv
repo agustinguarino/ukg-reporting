@@ -1,4 +1,4 @@
 Name,Value,Description
 bc_pipeline_api_url,https://buildconsole.ulti.io/api/pipeline/654aa1e7340e6379f892796c/0/5?search=,API URL to get builds from BC
-error_msg,Test Error Message,Test
+bc_build_api_url,https://buildconsole.ulti.io/api/build/,Test
 value,value2,Test2
