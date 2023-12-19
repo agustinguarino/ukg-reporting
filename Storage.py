@@ -19,6 +19,8 @@ class Storage:
         with open(self.file_path, "r", encoding="utf-8") as file:
             return str(file.read).split(",")
         
-    def saveBuildsListToBuildsFile(self, builds_str):
+    def saveBuildsListToBuildsFile(self, builds_list):
+        builds_str = ''.join(str(f"{b},") for b in builds_list)
+
         with open(self.file_path, "w", encoding="utf-8") as file:
             file.write(builds_str)
