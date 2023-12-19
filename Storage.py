@@ -9,14 +9,14 @@ class Storage:
             self.__createBuildsFile()
 
     def __createBuildsFile(self):
-        file = open(self.file_path, "w")
+        file = open(self.main_path, "w")
         file.close()
 
     def buildsFileExists(self):
         return True if os.path.exists(f"{self.main_path}/builds.txt") else False
     
     def getBuildsInBuildsFile(self):
-        with open(f"{self.file_path}/builds.txt", "r", encoding="utf-8") as file:
+        with open(f"{self.main_path}/builds.txt", "r", encoding="utf-8") as file:
             return str(file.read).split(",")
         
     def saveBuildsListToBuildsFile(self, builds_list):
