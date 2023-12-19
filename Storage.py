@@ -44,3 +44,16 @@ class Storage:
             for test in tests:
                 information = str(test).replace(",", ";").replace("||", ",") + "\n"
                 file.write(information)
+
+    def saveBuildSummary(self, build_number, build_summary):
+        folder_path = f"{self.main_path}/{build_number}"
+        file_name = "BuildSummary.csv"
+
+        self.__checkBuildPathExistence(build_number, folder_path, file_name)
+
+        headers = "ALL, SUCCESS, FAILED, MUTED, IGNORED, NEW FAILED"
+        data = f"{build_summary['all']}, {build_summary['success']},{build_summary['failed']},{build_summary['muted']},{build_summary['ignored']},{build_summary['newFailed']}"
+
+        with open(f"{folder_path}/{file_name}", "w", encoding="UTF-8") as file:
+            file.write(headers + "\n")
+            file.write(data)
