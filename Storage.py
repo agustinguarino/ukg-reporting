@@ -36,9 +36,9 @@ class Storage:
             
     def saveTestData(self,build_number, tests):
         report_path = f"{self.main_path}/{build_number}"
-        report_file_path = f"{report_path}/tests.csv"
+        report_file_path = f"{report_path}/Tests.csv"
 
-        self.__checkBuildPathExistence(build_number, report_path, "tests.csv")
+        self.__checkBuildPathExistence(build_number, report_path, "Tests.csv")
 
         with open(report_file_path, "a", encoding="utf-8") as file:
             for test in tests:
