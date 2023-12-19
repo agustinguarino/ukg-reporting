@@ -26,15 +26,19 @@ class Storage:
             file.write(builds_str)
     
     # Save tests data
+    
+    def __checkBuildPathExistence(self, build_number, folder_path, file_name):
+        if os.path.exists(folder_path) is False:
+            os.umask(0)
+            os.makedirs(folder_path)
+
+            file = open(f"{folder_path}/{file_name}", "w").close()
             
     def saveTestData(self,build_number, tests):
         report_path = f"{self.main_path}/{build_number}"
         report_file_path = f"{report_path}/tests.csv"
 
-        if os.path.exists(report_path) is False:
-            os.umask(0)
-            os.makedirs(report_path)
-            file = open(report_file_path, "w").close()
+        self.__checkBuildPathExistence(build_number, report_path, "tests.csv")
 
         with open(report_file_path, "a", encoding="utf-8") as file:
             for test in tests:
