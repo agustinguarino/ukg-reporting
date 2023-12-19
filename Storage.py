@@ -1,10 +1,10 @@
 import os
 
 class Storage:
-    file_path = ""
+    main_path = ""
 
     def __init__(self):
-        self.file_path = "C:/Data/builds.txt"
+        self.main_path = "C:/Data"
         if self.buildsFileExists() is False:
             self.__createBuildsFile()
 
@@ -13,14 +13,29 @@ class Storage:
         file.close()
 
     def buildsFileExists(self):
-        return True if os.path.exists(self.file_path) else False
+        return True if os.path.exists(f"{self.main_path}/builds.txt") else False
     
     def getBuildsInBuildsFile(self):
-        with open(self.file_path, "r", encoding="utf-8") as file:
+        with open(f"{self.file_path}/builds.txt", "r", encoding="utf-8") as file:
             return str(file.read).split(",")
         
     def saveBuildsListToBuildsFile(self, builds_list):
         builds_str = ''.join(str(f"{b},") for b in builds_list)
 
-        with open(self.file_path, "w", encoding="utf-8") as file:
+        with open(f"{self.main_path}/builds.txt", "w", encoding="utf-8") as file:
             file.write(builds_str)
+    
+    # Save tests data
+            
+    def saveTestData(self,build_number, tests):
+        report_path = f"{self.main_path}/{build_number}"
+        report_file_path = f"{report_path}/tests.csv"
+
+        os.umask(0)
+        os.makedirs(report_path)
+        file = open(report_file_path, "w").close()
+
+        with open(report_file_path, "a", encoding="utf-8") as file:
+            for test in tests:
+                information = str(test).replace("||", ",") + "\n"
+                file.write(information)
