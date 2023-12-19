@@ -31,11 +31,12 @@ class Storage:
         report_path = f"{self.main_path}/{build_number}"
         report_file_path = f"{report_path}/tests.csv"
 
-        os.umask(0)
-        os.makedirs(report_path)
-        file = open(report_file_path, "w").close()
+        if os.path.exists(report_path) is False:
+            os.umask(0)
+            os.makedirs(report_path)
+            file = open(report_file_path, "w").close()
 
         with open(report_file_path, "a", encoding="utf-8") as file:
             for test in tests:
-                information = str(test).replace("||", ",") + "\n"
+                information = str(test).replace(",", ";").replace("||", ",") + "\n"
                 file.write(information)
