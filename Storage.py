@@ -51,9 +51,19 @@ class Storage:
 
         self.__checkBuildPathExistence(build_number, folder_path, file_name)
 
-        headers = "ALL, SUCCESS, FAILED, MUTED, IGNORED, NEW FAILED"
-        data = f"{build_summary['all']}, {build_summary['success']},{build_summary['failed']},{build_summary['muted']},{build_summary['ignored']},{build_summary['newFailed']}"
+        headers = "ALL, SUCCESS, FAILED, MUTED, IGNORED, NEW FAILED, QUEUED DATE, STARTED DATE, FINISHED DATE"
+        data = f"{build_summary['all']}, {build_summary['success']},{build_summary['failed']},{build_summary['muted']},{build_summary['ignored']},{build_summary['newFailed']},"
 
         with open(f"{folder_path}/{file_name}", "w", encoding="UTF-8") as file:
             file.write(headers + "\n")
+            file.write(data)
+
+    def saveBuildExtraInformation(self, build_number, extra_information):
+        folder_path = f"{self.main_path}/{build_number}"
+        file_name = "BuildSummary.csv"
+
+        self.__checkBuildPathExistence(build_number, folder_path, file_name)
+
+        data = f"{extra_information['queued_date']},{extra_information['start_date']},{extra_information['finish_date']}"
+        with open(f"{folder_path}/{file_name}", "a", encoding="UTF-8") as file:
             file.write(data)
