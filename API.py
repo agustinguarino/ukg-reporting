@@ -22,6 +22,7 @@ class API:
 
     def getTestsInBuild(self, teamcity_id):
         url = self.config["tc_tests_api_url"].replace("[build_id]", str(teamcity_id))
+        print("URL: " + url)
 
         headers = {
             "Authorization": self.token
