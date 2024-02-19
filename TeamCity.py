@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import lxml
+from Preprocessing import Preprocessing
 
 class TeamCity:
 
@@ -13,13 +14,28 @@ class TeamCity:
         tests = data.find_all("testOccurrence")
 
         for test in tests:
-            name = test.get("name")
+            raw_name = test.get("name")
+            name_fields = Preprocessing(str(raw_name)).parseName()
+
             status = test.get("status")
             duration = test.get("duration")
             muted = test.get("muted")
 
-            response.append(f"{name}||{status}||{duration}||{muted}")
+            data = f"{str(name_fields)}||{status}||{duration}||{muted}"
 
+            if status == "FAILURE":
+                # Get stacktrace
+                details = test.find("details")
+                stacktrace = details.text[:600]
+
+                data = f"{data}||{stacktrace}"
+                #response.append(f"{name}||{status}||{duration}||{muted}||{stacktrace}")
+            #else:
+                #response.append(f"{name}||{status}||{duration}||{muted}")
+
+            response.append(data)
+
+            # TODO: Parse stacktrace to get error category and extra info
         return response
     
     def parseBuildSummary(self, payload):

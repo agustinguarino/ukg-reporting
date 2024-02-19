@@ -1,69 +1,76 @@
 import os
 
 class Storage:
-    main_path = ""
+    root_path = "C:/Users/agustinignacio.guari/Desktop/OneDrive - UKG/ukg-reporting/"
+    builds_path = f"{root_path}Builds/"
 
     def __init__(self):
-        self.main_path = "C:/Data"
         if self.buildsFileExists() is False:
             self.__createBuildsFile()
 
     def __createBuildsFile(self):
-        file = open(self.main_path, "w")
+        file = open(f"{self.root_path}builds.txt", "w")
         file.close()
 
     def buildsFileExists(self):
-        return True if os.path.exists(f"{self.main_path}/builds.txt") else False
+        return True if os.path.exists(f"{self.root_path}builds.txt") else False
     
     def getBuildsInBuildsFile(self):
-        with open(f"{self.main_path}/builds.txt", "r", encoding="utf-8") as file:
-            return str(file.read).split(",")
-        
-    def saveBuildsListToBuildsFile(self, builds_list):
-        builds_str = ''.join(str(f"{b},") for b in builds_list)
+        list = []
+        with open(f"{self.root_path}builds.txt", "r", encoding="utf-8") as file:
+            builds = file.readlines()
+            return builds
 
-        with open(f"{self.main_path}/builds.txt", "w", encoding="utf-8") as file:
-            file.write(builds_str)
-    
-    # Save tests data
-    
-    def __checkBuildPathExistence(self, build_number, folder_path, file_name):
-        if os.path.exists(folder_path) is False:
-            os.umask(0)
-            os.makedirs(folder_path)
+    def addBuildToBuildsFile(self, build_id):
+        builds = self.getBuildsInBuildsFile()
+        if build_id in builds:
+            return False
+        else:
+            with open(f"{self.root_path}builds.txt", "a") as file:
+                file.write(f"{build_id}\n")
 
-            file = open(f"{folder_path}/{file_name}", "w").close()
+    def removeBuildFromBuildsFile(self, build_id):
+        builds = list(map(lambda x: x.replace("\n", ""), self.getBuildsInBuildsFile()))
+
+        if build_id in builds:
+            builds.remove(build_id)
             
-    def saveTestData(self,build_number, tests):
-        report_path = f"{self.main_path}/{build_number}"
-        report_file_path = f"{report_path}/Tests.csv"
+            with open(f"{self.root_path}builds.txt", "w") as file:
+                builds_str = ''.join([str(build + "\n") for build in builds])
+                file.writelines(builds_str)
 
-        self.__checkBuildPathExistence(build_number, report_path, "Tests.csv")
+    def buildExistsInBuildFile(self, build_id):
+        builds = list(map(lambda x: x.replace("\n", ""), self.getBuildsInBuildsFile()))
 
-        with open(report_file_path, "a", encoding="utf-8") as file:
-            for test in tests:
-                information = str(test).replace(",", ";").replace("||", ",") + "\n"
-                file.write(information)
+        return True if build_id in builds else False
+    
+    # Save tests in build
+    def saveTestsInBuild(self, build_id, tests):
+        file_path = f"{self.builds_path}{build_id}/Tests.csv"
+        headers = "Test name, Package, Team, Status, Duration, Muted, Stacktrace"
 
-    def saveBuildSummary(self, build_number, build_summary):
-        folder_path = f"{self.main_path}/{build_number}"
-        file_name = "BuildSummary.csv"
+        # Create file
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        f = open(file_path, "w").close()
 
-        self.__checkBuildPathExistence(build_number, folder_path, file_name)
-
-        headers = "ALL, SUCCESS, FAILED, MUTED, IGNORED, NEW FAILED, QUEUED DATE, STARTED DATE, FINISHED DATE"
-        data = f"{build_summary['all']}, {build_summary['success']},{build_summary['failed']},{build_summary['muted']},{build_summary['ignored']},{build_summary['newFailed']},"
-
-        with open(f"{folder_path}/{file_name}", "w", encoding="UTF-8") as file:
+        with open(file_path, "a") as file:
             file.write(headers + "\n")
-            file.write(data)
 
-    def saveBuildExtraInformation(self, build_number, extra_information):
-        folder_path = f"{self.main_path}/{build_number}"
-        file_name = "BuildSummary.csv"
+        for test in tests:
+            #test_list = str(test).strip().replace(",", ";").replace("\n", "").split("||")
+            test_list = (" ".join(str(test).replace(",", ";").replace("\n", "").split())).split("||")
 
-        self.__checkBuildPathExistence(build_number, folder_path, file_name)
+            data = ",".join(str(x) for x in test_list)
+            with open(file_path, "a") as file:
+                file.write(data + "\n")
 
-        data = f"{extra_information['queued_date']},{extra_information['start_date']},{extra_information['finish_date']}"
-        with open(f"{folder_path}/{file_name}", "a", encoding="UTF-8") as file:
+
+    def saveBuildExtraInformation(self, build_id, build_summary, extra_information, build_status):
+        file_path = f"{self.builds_path}{build_id}/BuildSummary.csv"
+
+        headers = "Queued date, Start date, Finish date, Build State, All, Success, Failed, Muted, Ignored, New Failed"
+        data = f"{extra_information['queued_date']},{extra_information['start_date']},{extra_information['finish_date']},{str(build_status)},{build_summary['all']},{build_summary['success']},{build_summary['failed']},{build_summary['muted']},{build_summary['ignored']},{build_summary['newFailed']}"
+
+        with open(file_path, "w") as file:
+            file.write(headers + "\n")
             file.write(data)
