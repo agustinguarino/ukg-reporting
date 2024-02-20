@@ -9,6 +9,9 @@ class Builds:
         return self.information
     
     def analyzeBuildConsoleGeneralBuilds(self):
+        # Clear dictiionary before populating with new data
+        self.information = {}
+        
         data = self.payload["builds"]
         builds_amount = len(data)
 
