@@ -1,6 +1,6 @@
+from Environment import Environment
 from datetime import datetime, timedelta
 from Config import Config
-import pymsteams
 import math
 import json
 import requests
@@ -9,9 +9,27 @@ class Messaging:
     config = ""
     webhook_url = ""
     payload = ""
+    pipeline_name = ""
 
-    def __init__(self) -> None:
+    def __init__(self, pipeline_name):
+        self.pipeline_name = pipeline_name
         self.config = Config().getConfig()
+        self.webhook_url = self.__getWebhookURL(pipeline_name)
+
+    def __getWebhookURL(self, pipeline_name):
+        # Set webhook URL name depending on pipeline name
+        webhook_url = ""
+        if pipeline_name == "UKGPro Core Domains":
+            webhook_url = Environment().getWebhookURL("TEAMS_CORE_DOMAINS_WEBHOOK_URL")
+
+        elif pipeline_name == "UKGPro Core Quality Gate":
+            webhook_url = Environment().getWebhookURL("TEAMS_GENERAL_WEBHOOK_URL")
+
+        else:
+            webhook_url = "Failed"
+            print("Failed to get webhook_url")
+        
+        return webhook_url
 
     def __truncate(self, number, decimals):
         """
@@ -27,9 +45,7 @@ class Messaging:
         factor = 10.0 ** decimals
         return math.trunc(number * factor) / factor
 
-    def craftMessage(self, webhook_url, build_summary, build_extra_information, failure_teams, tc_build_id, bc_build_number, build_status):
-
-        self.webhook_url = webhook_url
+    def craftMessage(self, build_summary, build_extra_information, failure_teams, tc_build_id, bc_build_number, build_status):
 
         # Define which image to use for the section (success or fail) and the color of the card (green or red)
         if "SUCCESS" in str(build_status):
@@ -98,6 +114,7 @@ class Messaging:
         # Get payload and format
         payload = self.config["teams_card_payload"]
 
+        payload = payload.replace("%pipeline_name%", self.pipeline_name)
         payload = payload.replace("%build_version%", bc_build_number)
         payload = payload.replace("%total_tests%", total_tests)
         payload = payload.replace("%tests_passed%", tests_passed)
