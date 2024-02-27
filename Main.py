@@ -18,10 +18,12 @@ from datetime import datetime
 from time import sleep
 
 build_ids = []
+#pipeline_name = "UKGPro Core Quality Gate"
+pipeline_name = "UKGPro Core Domains"
 
 def run():
-    bc_builds = API().getBuildConsoleBuilds()
-    builds_state = Builds(bc_builds).analyzeBuildConsoleGeneralBuilds()
+    bc_builds = API(pipeline_name).getBuildConsoleBuilds()
+    builds_state = Builds(bc_builds, pipeline_name).analyzeBuildConsoleGeneralBuilds()
 
     Logger(Logger.INFO, f"Builds state: {builds_state}")
 
@@ -39,13 +41,14 @@ def run():
 
     builds = build_ids
     #builds.append("65c16c787a8c7695bf327c16\n")
+    builds.append("65dd35e035054241555b5c85")
 
     for build in builds:
         build_bc_id = build.replace("\n", "")
         Logger(Logger.INFO, f"Processing {build_bc_id}.")
 
-        build_result = API().getBuildConsoleSpecificBuild(build_bc_id)
-        build_data = Builds(build_result).analyzeBuildConsoleSpecificBuild()
+        build_result = API(pipeline_name).getBuildConsoleSpecificBuild(build_bc_id)
+        build_data = Builds(build_result, pipeline_name).analyzeBuildConsoleSpecificBuild()
 
         if build_data is False:
             Logger(Logger.WARNING, f"Failure detected when anaylizing specific build ({build_bc_id}), skipping loop iteration.")
@@ -58,13 +61,14 @@ def run():
             #build_data["teamcity_id"] = "54228319" # Lot of failures - 49 from Payroll
             #build_data["teamcity_id"] = "54131718" # Success
             #build_data["teamcity_id"] = "54426229" # Different failures
+            build_data["teamcity_id"] = "54763464" # Regression pipeline
 
             Logger(Logger.HIGH, f"Launching reporting for build {build_data['teamcity_id']} ({build_data['build_state']})")
             #Launch reporting here
 
             build_id = build_data["teamcity_id"]
 
-            tests = API().getTestsInBuild(build_id)
+            tests = API(pipeline_name).getTestsInBuild(build_id)
             parsed_tests = TeamCity().parseTestsInBuild(tests)
 
             Storage().saveTestsInBuild(build_id, parsed_tests)
@@ -72,10 +76,10 @@ def run():
             # Build summary and extra information
             Logger(Logger.INFO, f"Saving build extra information - {build_bc_id}")
 
-            build_summary = API().getBuildSummary(build_id)
+            build_summary = API(pipeline_name).getBuildSummary(build_id)
             parsed_build_summary = TeamCity().parseBuildSummary(build_summary)
 
-            extra_information = API().getBuildExtraInformation(build_id)
+            extra_information = API(pipeline_name).getBuildExtraInformation(build_id)
             parsed_extra_information = TeamCity().parseBuildExtraInformation(extra_information)
 
             Storage().saveBuildExtraInformation(build_id, parsed_build_summary, parsed_extra_information, build_data["build_status"])
@@ -84,10 +88,10 @@ def run():
             Logger(Logger.INFO, f"Starting teams message process - {build_bc_id}")
 
             failure_teams = Preprocessing("test").getTeamsWithFailures(parsed_tests)
-            webhook_url = Environment().getWebhookURL("TEAMS_GENERAL_WEBHOOK_URL")
+            #webhook_url = Environment().getWebhookURL("TEAMS_GENERAL_WEBHOOK_URL")
 
-            message = Messaging()
-            message.craftMessage(webhook_url, parsed_build_summary, parsed_extra_information, failure_teams, build_data["teamcity_id"], build_data["buildconsole_number"], build_data["build_status"])
+            message = Messaging(pipeline_name)
+            message.craftMessage(parsed_build_summary, parsed_extra_information, failure_teams, build_data["teamcity_id"], build_data["buildconsole_number"], build_data["build_status"])
             message.sendMessage()
 
             Logger(Logger.INFO, f"Finalizing teams message process - {build_bc_id}")
