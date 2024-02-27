@@ -1,0 +1,396 @@
+Name,Value,Description
+bc_pipeline_api_url,https://buildconsole.ulti.io/api/pipeline/654aa1e7340e6379f892796c/0/5?search=,API URL to get builds from BC
+bc_build_api_url,https://buildconsole.ulti.io/api/build/,Test
+tc_tests_api_url,"https://teamcity.dev.us.corp/app/rest/testOccurrences?locator=build:([build_id]),count:-1&fields=testOccurrence(id,name,status,muted,duration,newFailure,href,details)",Test2
+tc_build_summary_api_url,"https://teamcity.dev.us.corp/app/rest/ui/testOccurrences?locator=build:(id:[build_id]),count:-1&fields=testCounters(failed,success,muted,all,ignored,newFailed)",
+tc_extra_info_api_url,"https://teamcity.dev.us.corp/app/rest/builds?locator=id:[build_id]&fields=count,build(id,number,branchName,defaultBranch,queuedDate,startDate,finishDate,history,composite,parallelized,links(link(type,relativeUrl)),comment(text,timestamp,user(id,name,username)),statusChangeComment(text,timestamp,user(id,name,username)),statusText,status,state,failedToStart,personal,detachedFromAgent,finishOnAgentDate,pinned,pinInfo(text,timestamp,user(id,name,username)),user(id,name,username),customization,canceledInfo(text,user(id,name,username)),approvalInfo(status),agent(name,id,links(link(type,relativeUrl)),environment(osType),typeId,connected,pool(id,name)),tags(tag(name,private),$locator(private:any,owner:current)),artifacts($locator(count:1),count:($optional)),limitedChangesCount($optional),buildType(id),snapshot-dependencies(count:(1)),running-info(percentageComplete,elapsedSeconds,estimatedTotalSeconds,leftSeconds,probablyHanging,lastActivityTime,outdated,outdatedReasonBuild(number,links(link(type,relativeUrl)))))",
+build_success_image,https://static-00.iconduck.com/assets.00/alert-success-icon-1024x1024-aobtkid4.png,
+build_fail_image,https://static-00.iconduck.com/assets.00/high-priority-icon-512x512-fk4ioedw.png,
+teams_card_payload,"{
+  ""type"": ""message"",
+  ""attachments"": [
+    {
+      ""contentType"": ""application/vnd.microsoft.card.adaptive"",
+      ""content"": {
+        ""$schema"": ""http://adaptivecards.io/schemas/adaptive-card.json"",
+        ""type"": ""AdaptiveCard"",
+        ""version"": ""1.0"",
+        ""body"": [
+          {
+            ""type"": ""Container"",
+            ""id"": ""bdbdaba9-0a14-a4d6-b125-44f3575fc5ab"",
+            ""padding"": ""None"",
+            ""items"": [
+              {
+                ""type"": ""TextBlock"",
+                ""id"": ""5068d572-6fb4-486b-7159-1c67bfb6c117"",
+                ""text"": ""%build_version%"",
+                ""wrap"": true,
+                ""spacing"": ""None"",
+                ""size"": ""ExtraLarge"",
+                ""weight"": ""Bolder"",
+                ""horizontalAlignment"": ""Center""
+              }
+            ]
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""6db1fabd-68a9-22d1-4cc3-310a26aeea24"",
+            ""padding"": ""None"",
+            ""items"": [
+              {
+                ""type"": ""ColumnSet"",
+                ""id"": ""fec48ea4-9b5d-b39f-f2a9-359477619294"",
+                ""columns"": [
+                  {
+                    ""type"": ""Column"",
+                    ""id"": ""a4f0308f-7c40-b435-25ab-3597a8ece759"",
+                    ""padding"": ""None"",
+                    ""width"": ""auto"",
+                    ""items"": [
+                      {
+                        ""type"": ""Image"",
+                        ""id"": ""b3b1e119-f72f-b468-2497-f620304fdebd"",
+                        ""url"": ""%p0_image%"",
+                        ""width"": ""140px"",
+                        ""height"": ""140px""
+                      }
+                    ]
+                  },
+                  {
+                    ""type"": ""Column"",
+                    ""id"": ""11f5001c-a71e-37c5-9d95-df7777c7a00f"",
+                    ""padding"": ""None"",
+                    ""width"": ""stretch"",
+                    ""items"": [
+                      {
+                        ""type"": ""TextBlock"",
+                        ""id"": ""21346c1f-42d5-b395-47ea-070f922fd30b"",
+                        ""text"": ""P0 Quality Gate"",
+                        ""size"": ""ExtraLarge"",
+                        ""weight"": ""Bolder"",
+                        ""horizontalAlignment"": ""Center"",
+                        ""wrap"": true
+                      }
+                    ],
+                    ""verticalContentAlignment"": ""Center"",
+                    ""style"": ""default""
+                  }
+                ],
+                ""padding"": ""None""
+              }
+            ]
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""a3a5f034-ca5d-53f9-47ce-c2fb96f8e98c"",
+            ""padding"": ""None"",
+            ""items"": [
+              {
+                ""type"": ""ColumnSet"",
+                ""id"": ""c201d96b-78eb-0c06-343b-0450d4376ace"",
+                ""columns"": [
+                  {
+                    ""type"": ""Column"",
+                    ""id"": ""9ac4cfed-699c-f67c-2c8e-a23347b7d59f"",
+                    ""padding"": ""Medium"",
+                    ""width"": ""stretch"",
+                    ""items"": [
+                      {
+                        ""type"": ""FactSet"",
+                        ""id"": ""94a1e5b5-a3b8-5a4d-4fc9-53d9ff4e2f8b"",
+                        ""facts"": [
+                          {
+                            ""title"": ""Total tests:"",
+                            ""value"": ""%total_tests%""
+                          },
+                          {
+                            ""title"": ""Tests passed:"",
+                            ""value"": ""%tests_passed%""
+                          },
+                          {
+                            ""title"": ""Tests failed:"",
+                            ""value"": ""%tests_failed%""
+                          }
+                        ]
+                      }
+                    ],
+                    ""horizontalAlignment"": ""Center"",
+                    ""verticalContentAlignment"": ""Center""
+                  },
+                  {
+                    ""type"": ""Column"",
+                    ""id"": ""0605caf8-3fa1-2be0-f318-5746bc9d1cb3"",
+                    ""padding"": ""None"",
+                    ""width"": ""stretch"",
+                    ""items"": [
+                      {
+                        ""type"": ""FactSet"",
+                        ""id"": ""6a43a29b-5290-48d8-3d96-96016740fe17"",
+                        ""facts"": [
+                          {
+                            ""title"": ""Muted tests:"",
+                            ""value"": ""%muted_tests%""
+                          },
+                          {
+                            ""title"": ""Ignored tests:"",
+                            ""value"": ""%ignored_tests%""
+                          },
+                          {
+                            ""title"": ""New failed tests:"",
+                            ""value"": ""%new_failed_tests%""
+                          }
+                        ]
+                      }
+                    ],
+                    ""horizontalAlignment"": ""Center"",
+                    ""verticalContentAlignment"": ""Center""
+                  }
+                ],
+                ""padding"": ""None"",
+                ""horizontalAlignment"": ""Center"",
+                ""style"": ""emphasis""
+              }
+            ],
+            ""horizontalAlignment"": ""Center"",
+            ""verticalContentAlignment"": ""Center"",
+            ""separator"": true
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""54a8dd7d-c383-c209-f265-b84dbe1a62aa"",
+            ""padding"": ""None"",
+            ""items"": [
+              {
+                ""type"": ""TextBlock"",
+                ""id"": ""6266873d-3460-34fa-f1cb-32710922c7bd"",
+                ""text"": "" "",
+                ""wrap"": true
+              }
+            ],
+            ""spacing"": ""None""
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""1109b3d8-49cc-e250-9f8d-5c2fd0be2566"",
+            ""padding"": ""Large"",
+            ""items"": [
+              {
+                ""type"": ""TextBlock"",
+                ""id"": ""db88063f-f26f-fc73-f922-0220ac8b527c"",
+                ""text"": ""Teams with failures:"",
+                ""wrap"": true,
+                ""horizontalAlignment"": ""Center""
+              },
+              {
+                ""type"": ""TextBlock"",
+                ""id"": ""7a69c0b9-c15e-0c49-338f-ee8178f239aa"",
+                ""text"": ""%teams_with_failures%"",
+                ""wrap"": true,
+                ""horizontalAlignment"": ""Center""
+              }
+            ],
+            ""style"": ""emphasis""
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""28329b90-ca63-5359-2edf-7d37e9513a1f"",
+            ""padding"": ""None"",
+            ""spacing"": ""None"",
+            ""items"": [
+              {
+                ""type"": ""TextBlock"",
+                ""id"": ""7bfab5fe-29ad-476f-1bf3-0d5f5579c6b8"",
+                ""text"": "" "",
+                ""wrap"": true
+              }
+            ]
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""7d945a99-1793-8b00-ef93-836b6459ace4"",
+            ""padding"": ""None"",
+            ""items"": [
+              {
+                ""type"": ""ColumnSet"",
+                ""id"": ""5f033a72-562f-daaf-438c-5193e5bec308"",
+                ""columns"": [
+                  {
+                    ""type"": ""Column"",
+                    ""id"": ""4e91bd46-483b-01eb-4b17-d817b5c7f783"",
+                    ""padding"": ""Medium"",
+                    ""width"": ""stretch"",
+                    ""items"": [
+                      {
+                        ""type"": ""FactSet"",
+                        ""id"": ""3d7cbdce-603a-de17-3a66-23a4455224bd"",
+                        ""facts"": [
+                          {
+                            ""title"": ""Queued date:"",
+                            ""value"": ""%queued_date%""
+                          },
+                          {
+                            ""title"": ""Started date:"",
+                            ""value"": ""%started_date%""
+                          },
+                          {
+                            ""title"": ""Finish date:"",
+                            ""value"": ""%finish_date%""
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    ""type"": ""Column"",
+                    ""padding"": ""Medium"",
+                    ""width"": ""stretch"",
+                    ""items"": [
+                      {
+                        ""type"": ""FactSet"",
+                        ""id"": ""72c173a4-3be6-f01a-7f91-00152e3ea912"",
+                        ""facts"": [
+                          {
+                            ""title"": ""From queue to finish:"",
+                            ""value"": ""%from_queue_to_finish%""
+                          },
+                          {
+                            ""title"": ""From start to finish:"",
+                            ""value"": ""%from_start_to_finish%""
+                          },
+                          {
+                            ""title"": ""Test execution time:"",
+                            ""value"": ""Work in progress...""
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                ""padding"": ""None""
+              }
+            ],
+            ""style"": ""emphasis""
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""c21cb369-e892-95d4-7e92-b8fb4cd66a42"",
+            ""padding"": ""None"",
+            ""items"": [
+              {
+                ""type"": ""ColumnSet"",
+                ""id"": ""0d8b09d3-7566-65c9-f1a7-da26901675f2"",
+                ""columns"": [
+                  {
+                    ""type"": ""Column"",
+                    ""id"": ""6757c53a-6ec9-1798-415a-96a61bcb53e6"",
+                    ""padding"": ""None"",
+                    ""width"": ""auto"",
+                    ""items"": [
+                      {
+                        ""type"": ""Image"",
+                        ""id"": ""75bb5ec6-9f87-4c39-b763-b5b7538f347a"",
+                        ""url"": ""https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/1200px-Eo_circle_green_checkmark.svg.png"",
+                        ""size"": ""Medium"",
+                        ""width"": ""140px"",
+                        ""height"": ""140px""
+                      }
+                    ]
+                  },
+                  {
+                    ""type"": ""Column"",
+                    ""padding"": ""None"",
+                    ""width"": ""stretch"",
+                    ""items"": [
+                      {
+                        ""type"": ""TextBlock"",
+                        ""id"": ""f3d468f7-128b-e850-6a1c-d4e7af9431b7"",
+                        ""text"": ""P1 Quality Gate"",
+                        ""wrap"": true,
+                        ""size"": ""ExtraLarge"",
+                        ""weight"": ""Bolder"",
+                        ""horizontalAlignment"": ""Center""
+                      }
+                    ],
+                    ""horizontalAlignment"": ""Center"",
+                    ""verticalContentAlignment"": ""Center""
+                  }
+                ],
+                ""padding"": ""None""
+              }
+            ],
+            ""separator"": true
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""66f9263c-017c-8c34-6e45-b12f9a6a1162"",
+            ""padding"": ""None"",
+            ""spacing"": ""None"",
+            ""items"": [
+              {
+                ""type"": ""TextBlock"",
+                ""id"": ""79313d29-6710-e98a-1488-72550433c774"",
+                ""text"": "" "",
+                ""wrap"": true
+              }
+            ]
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""0f5a0203-66d6-00fa-472d-5e0c03dd92c2"",
+            ""padding"": ""Medium"",
+            ""items"": [
+              {
+                ""type"": ""TextBlock"",
+                ""id"": ""f7f53d53-6663-230d-150e-3ce734503779"",
+                ""text"": ""Work in progress..."",
+                ""wrap"": true,
+                ""size"": ""Medium"",
+                ""color"": ""Accent"",
+                ""weight"": ""Bolder"",
+                ""horizontalAlignment"": ""Center""
+              }
+            ],
+            ""style"": ""emphasis""
+          },
+          {
+            ""type"": ""Container"",
+            ""id"": ""33b119e5-f3bf-22b5-f0f4-4b8eb109525b"",
+            ""padding"": ""Medium"",
+            ""items"": [
+              {
+                ""type"": ""ActionSet"",
+                ""id"": ""b6234511-dda7-40f3-1d60-9ca92301457e"",
+                ""actions"": [
+                  {
+                    ""type"": ""Action.OpenUrl"",
+                    ""id"": ""2a484bce-be94-f98c-9c8d-0d19fab9d1df"",
+                    ""title"": ""Open in TeamCity"",
+                    ""url"": ""%teamcity_url%"",
+                    ""style"": ""positive"",
+                    ""isPrimary"": true
+                  },
+                  {
+                    ""type"": ""Action.OpenUrl"",
+                    ""id"": ""698b574b-39ea-8435-0341-de2f3f559004"",
+                    ""title"": ""See full report"",
+                    ""url"": ""%full_report_url%""
+                  }
+                ],
+                ""horizontalAlignment"": ""Center"",
+                ""spacing"": ""Large""
+              }
+            ],
+            ""horizontalAlignment"": ""Center"",
+            ""verticalContentAlignment"": ""Center"",
+            ""separator"": true
+          }
+        ],
+        ""msteams"": {
+          ""entities"": %msteams_entities%
+        },
+        ""padding"": ""None""
+      }
+    }
+  ]
+}",
