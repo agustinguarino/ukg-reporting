@@ -5,13 +5,31 @@ from Environment import Environment
 class API:
     config = ""
     token = ""
+    pipeline_url = ""
 
-    def __init__(self):
+    def __init__(self, pipeline_name):
         self.config = Config().getConfig()
         self.token = Environment().getTeamcityToken()
+        self.pipeline_url = self.__getPipelineURL(pipeline_name)
+
+    def __getPipelineURL(self, pipeline_name):
+        # Set StepMap name depending on pipeline name
+        pipeline_url = ""
+        if pipeline_name == "UKGPro Core Domains":
+            pipeline_url = self.config["bc_core_pipeline_api_url"]
+
+        elif pipeline_name == "UKGPro Core Quality Gate":
+            pipeline_url = self.config["bc_pipeline_api_url"]
+
+        else:
+            pipeline_url = "Failed"
+            print("Failed to get pipeline URL.")
+        
+        print(f"API URL: {pipeline_url}")
+        return pipeline_url
 
     def getBuildConsoleBuilds(self):
-        url = self.config["bc_pipeline_api_url"]
+        url = self.pipeline_url
         return requests.get(url).json()
     
     def getBuildConsoleSpecificBuild(self, build_id):
