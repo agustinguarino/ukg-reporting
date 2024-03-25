@@ -41,7 +41,7 @@ def run():
 
     builds = build_ids
     #builds.append("65c16c787a8c7695bf327c16\n")
-    builds.append("65dd35e035054241555b5c85")
+    #builds.append("65dd35e035054241555b5c85")
 
     for build in builds:
         build_bc_id = build.replace("\n", "")
@@ -61,7 +61,7 @@ def run():
             #build_data["teamcity_id"] = "54228319" # Lot of failures - 49 from Payroll
             #build_data["teamcity_id"] = "54131718" # Success
             #build_data["teamcity_id"] = "54426229" # Different failures
-            build_data["teamcity_id"] = "54763464" # Regression pipeline
+            #build_data["teamcity_id"] = "54763464" # Regression pipeline
 
             Logger(Logger.HIGH, f"Launching reporting for build {build_data['teamcity_id']} ({build_data['build_state']})")
             #Launch reporting here
